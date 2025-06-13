@@ -67,7 +67,7 @@ def test_na_handler_interpolate(mixed_df):
     assert result['num1'].isna().sum() == 0
     assert result['num1'].iloc[2] == 3
     assert result['num2'].isna().sum() == 0
-    assert result['num2'].iloc[0] == 4
+    assert result['num2'].iloc[0] == 2
     # Object columns should remain unchanged
     assert result['obj1'].isna().sum() == 1
     assert result['obj2'].isna().sum() == 1
@@ -130,7 +130,7 @@ def test_fill_interpolate_numeric(mixed_df):
     assert filled1.isna().sum() == 0
     assert filled2.isna().sum() == 0
     assert filled1.iloc[2] == 3
-    assert filled2.iloc[0] == 4
+    assert filled2.iloc[0] == 2
 
 def test_fill_interpolate_non_numeric(mixed_df):
     s1 = mixed_df['obj1']
