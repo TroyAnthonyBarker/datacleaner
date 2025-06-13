@@ -86,13 +86,13 @@ datacleaner/
    pip install -e .
    ```
 
-## Ejecutar Pruebas
+## 🦺 Ejecutar Pruebas
 
 ```bash
 pytest
 ```
 
-## Buenas Prácticas Implementadas
+## 😊 Buenas Prácticas Implementadas
 
 1. **Modularidad**: Separación de responsabilidades en módulos
 2. **Documentación**: Docstrings detallados para métodos
