@@ -1,101 +1,42 @@
 import pandas as pd
 
-def _raise_error_convert(column_name: str) -> None:
+def convert_to_datetime(column: pd.Series) -> pd.Series:
     """
-    Raise a ValueError with a generic message.
-    
-    This function is used to raise an error when a specific condition is not met.
-    """
-    raise ValueError(f"Could not convert column '{column_name}', please check the data.")
+    Convert a pandas Series to datetime format.
+    This function attempts to convert the Series to datetime format, coercing errors to NaT.
 
-def _raise_error_column(column_name: str) -> None:
-    """
-    Raise a ValueError indicating that the specified column does not exist.
-    
-    This function is used to raise an error when a column is not found in the DataFrame.
-    """
-    raise ValueError(f"Column '{column_name}' does not exist in the DataFrame.")
-
-def convert_to_datetime(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
-    """
-    Convert a specified column in a DataFrame to datetime format.
-    
     Parameters:
-    df (pd.DataFrame): The DataFrame containing the data.
-    column_name (str): The name of the column to convert.
-    
+    column (pd.Series): The Series to convert.
+
     Returns:
-    pd.DataFrame: The DataFrame with the specified column converted to datetime.
+    pd.Series: The Series converted to datetime format.
     """
+    return pd.to_datetime(column, errors='coerce')
 
-    if column_name not in df.columns:
-        _raise_error_column(column_name)
-    
-    try:
-        df[column_name] = pd.to_datetime(df[column_name], errors='raise')
-        return df
-    except (TypeError, ValueError):
-        _raise_error_convert(column_name)
-
-def convert_to_numeric(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
+def convert_to_numeric(column: pd.Series) -> pd.Series:
     """
-    Convert a specified column in a DataFrame to numeric format.
-    
+    Convert a pandas Series to numeric format.
+    This function attempts to convert the Series to numeric format, coercing errors to NaN.
+
     Parameters:
-    df (pd.DataFrame): The DataFrame containing the data.
-    column_name (str): The name of the column to convert.
-    
-    Returns:
-    pd.DataFrame: The DataFrame with the specified column converted to numeric.
-    """
+    column (pd.Series): The Series to convert.
 
-    if column_name not in df.columns:
-        _raise_error_column(column_name)
-    
-    try:
-        df[column_name] = pd.to_numeric(df[column_name], errors='raise')
-        return df
-    except ValueError:
-        _raise_error_convert(column_name)
-    
-def encode_labels(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
+    Returns:
+    pd.Series: The Series converted to numeric format.
     """
-    Encode a specified column in a DataFrame using label encoding.
+    return pd.to_numeric(column, errors='coerce')
+
     
+def encode_labels(column: pd.Series) -> pd.Series:
+    """
+    Encode categorical labels in a pandas Series to numeric codes.
+    This function converts the Series to a categorical type and then encodes the categories as numeric codes.
+
     Parameters:
-    df (pd.DataFrame): The DataFrame containing the data.
-    column_name (str): The name of the column to encode.
-    
-    Returns:
-    pd.DataFrame: The DataFrame with the specified column encoded.
-    """
-    
-    if column_name not in df.columns:
-        _raise_error_column(column_name)
-    
-    try:
-        df[column_name] = df[column_name].astype('category').cat.codes
-        return df
-    except Exception:
-        _raise_error_convert(column_name)
+    column (pd.Series): The Series to encode.
 
-def convert_to_float(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
-    """
-    Convert a specified column in a DataFrame to float format.
-    
-    Parameters:
-    df (pd.DataFrame): The DataFrame containing the data.
-    column_name (str): The name of the column to convert.
-    
     Returns:
-    pd.DataFrame: The DataFrame with the specified column converted to float.
+    pd.Series: The Series with categorical labels encoded as numeric codes.
     """
 
-    if column_name not in df.columns:
-        _raise_error_column(column_name)
-    
-    try:
-        df[column_name] = df[column_name].astype(float)
-        return df
-    except ValueError:
-        _raise_error_convert(column_name)
+    return column.astype('category').cat.codes
