@@ -24,8 +24,7 @@ def na_handler(df: pd.DataFrame, strategy: str = 'mean'):
 
     Parameters:
     df (pd.DataFrame): The DataFrame to process.
-    strategy (str): The strategy to use for handling missing values.
-                    Options are 'mean', 'median', 'mode', 'drop'.
+    strategy (str): The strategy to use for handling missing values. Options are 'mean', 'median', 'mode', 'previous', 'next', 'interpolate', 'drop'.
 
     Returns:
     pd.DataFrame: The DataFrame with missing values handled.
@@ -166,10 +165,8 @@ def fill_next(column: pd.Series) -> pd.Series:
 
 def fill_interpolate(column: pd.Series) -> pd.Series:
     """
-    Fill missing values in a Series using linear interpolation.
+    Fill missing values in a Series using linear interpolation in both directions.
     This function will raise an error if the Series is of non-numeric type.
-
-    If the first value is missing, it will be filled with the last value of the Series.
 
     Parameters:
     column (pd.Series): The Series to process.
@@ -183,9 +180,6 @@ def fill_interpolate(column: pd.Series) -> pd.Series:
     if column.dtype == 'object':
         raise ValueError("Cannot interpolate non-numeric data types.")
     
-    column = column.interpolate()
-
-    if pd.isna(column[0]):
-        column[0] = column[len(column) - 1]
+    column = column.interpolate(method='linear', limit_direction='both')
 
     return column
